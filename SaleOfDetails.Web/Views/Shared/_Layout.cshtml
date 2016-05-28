@@ -1,0 +1,35 @@
+﻿<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta charset="utf-8" />
+    <title>@ViewBag.Title – приложение ASP.NET</title>
+    <link href="~/favicon.ico" rel="shortcut icon" type="image/x-icon" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+</head>
+<body style="display: none" data-bind="visible: true">
+    <div class="wrapper container">
+        <header>
+            <a href="/"><img src="" alt="ОАО АТМ-Кубань"></a>
+            @Html.Partial("_LoginPartial")
+        </header>
+        <nav class="navbar navbar-default">
+            <ul class="nav navbar-nav">
+                <li><a href="#" class="active" data-bind="click: navigateToHome">Товары</a></li>
+                <li><a href="#" data-bind="click: navigateToClient">Клиенты</a></li>
+                <li><a href="#" data-bind="click: navigateToEmployee">Сотрудники</a></li>
+                <li><a href="#" data-bind="click: navigateToReport">Отчёты</a></li>
+            </ul>
+        </nav>
+        @RenderBody()
+        @RenderSection("SPAViews", required: false)
+    </div>
+    <footer></footer>
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    @RenderSection("Scripts", required: false)
+</body>
+</html>
