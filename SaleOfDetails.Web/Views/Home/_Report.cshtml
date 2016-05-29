@@ -1,10 +1,12 @@
 ﻿<!-- ko with: reports -->
 <div class="heading">
     <h1>Отчёты</h1>
+
+    <a href="@Url.Action("SalesReport", "Report")">Скачать отчет о продажах</a>
 </div>
 <div class="row">
     <section class="col-md-24">
-        <a href="@Url.Action("SalesReport", "Report")">Отчёт 1</a>
+        <div id="chart" style="width: 100%; height: 350px;"></div>
     </section>
 </div>
 <!-- /ko -->

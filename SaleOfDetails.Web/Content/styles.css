@@ -7413,3 +7413,7 @@ body .wrapper .heading h1 {
 body header {
   padding: 20px 0;
 }
+.highcharts-container {
+  width: 100% !important;
+  height: 100% !important;
+}

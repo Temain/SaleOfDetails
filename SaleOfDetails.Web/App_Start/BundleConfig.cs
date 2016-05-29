@@ -37,6 +37,12 @@ namespace SaleOfDetails.Web
                 "~/Scripts/bootstrap3-typeahead.min.js",
                 "~/Scripts/alert.js"));
 
+            bundles.Add(new ScriptBundle("~/bundles/highcharts").Include(
+                       "~/Scripts/highcharts/highcharts.js",
+                       "~/Scripts/highcharts/highcharts-more.js",
+                       "~/Scripts/highcharts/modules/data.js",
+                       "~/Scripts/highcharts/modules/exporting.js"));
+
             // Используйте версию Modernizr для разработчиков, чтобы учиться работать. Когда вы будете готовы перейти к работе,
             // используйте средство построения на сайте http://modernizr.com, чтобы выбрать только нужные тесты.
             bundles.Add(new ScriptBundle("~/bundles/modernizr").Include(

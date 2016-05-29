@@ -138,6 +138,38 @@ namespace SaleOfDetails.Web.Controllers
             return Ok(sale);
         }
 
+        // GET: api/Sale/ChartData
+        [HttpGet]
+        [Route("api/Sale/ChartData/{year}")]
+        public IHttpActionResult ChartData(int year)
+        {
+            var sales = UnitOfWork.Repository<Sale>()
+                .GetQ(filter: x => x.SaleDate.HasValue && x.SaleDate.Value.Year == year,
+                    includeProperties: "Product, Employee, Employee.Person, Client, Client.Person");
+            var data = sales
+                .GroupBy(g => g.SaleDate.Value.Month)
+                .Select(x => new
+                {
+                    Month = x.Key,
+                    Amount = x.Sum(s => s.NumberOfProducts*s.Product.Cost)
+                });
+                //.OrderBy(x => x.Month)
+                //.Select(x => x.Amount);
+
+            var months = Enumerable.Range(0, 11);
+            var response = months.GroupJoin(data,
+                m => m,
+                d => d.Month,
+                (m, g) => g
+                    .Select(r => new KeyValuePair<int, decimal>(m, r.Amount))
+                    .DefaultIfEmpty(new KeyValuePair<int, decimal>(m, 0))
+                )
+                .SelectMany(g => g)
+                .Select(x => x.Value);
+
+            return Ok(response);
+        }
+
         private bool SaleExists(int id)
         {
             return UnitOfWork.Repository<Sale>().GetQ().Count(e => e.SaleId == id) > 0;
