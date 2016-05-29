@@ -1,0 +1,33 @@
+﻿<!-- ko with: product -->
+<div class="heading">
+    <h1>Товары</h1>
+    <a href="/#product/create"><i class="fa fa-plus"></i> Добавить</a>
+</div>
+<div class="row">
+    <section class="col-md-24">
+        <table class="table table-striped table-bordered table-hover">
+            <thead>
+                <tr>
+                    <td class="text-center">№</td>
+                    <td class="text-center">Название детали / спецтехники</td>
+                    <td class="text-center">Цена</td>
+                    <td class="text-center">В наличии</td>
+                    <td class="text-center">Действия</td>
+                </tr>
+            </thead>
+            <tbody data-bind="foreach: list">
+                <tr>
+                    <td class="text-center" data-bind="text: $index() + 1"></td>
+                    <td class="text-center" data-bind="text: productName()"></td>
+                    <td class="text-center" data-bind="text: cost"></td>
+                    <td class="text-center" data-bind="text: inStock"></td>
+                    <td class="text-center">
+                        <a href="#" data-bind="attr : { href: '/#product/' + productId() }"><i class="fa fa-pencil"></i></a>
+                        <a href="#" data-bind="click: $parent.removeProduct"><i class="fa fa-times"></i></a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </section>
+</div>
+<!-- /ko -->

@@ -7,14 +7,14 @@ using SaleOfDetails.Web.Models.Mapping;
 namespace SaleOfDetails.Web.Models
 {
     /// <summary>
-    /// Сотрудник
+    /// Клиент
     /// </summary>
-    public class EmployeeViewModel : IHaveCustomMappings
+    public class ClientViewModel : IHaveCustomMappings
     {
         /// <summary>
         /// Идентификатор
         /// </summary>
-        public int EmployeeId { get; set; }
+        public int ClientId { get; set; }
 
         /// <summary>
         /// Физическое лицо
@@ -44,26 +44,26 @@ namespace SaleOfDetails.Web.Models
         /// <summary>
         /// ФИО
         /// </summary>
-        public string EmployeeFullName { get; set; }
+        public string ClientFullName { get; set; }
 
         /// <summary>
-        /// Дата приема на работу
+        /// Телефон
         /// </summary>
-        public DateTime? EmployeeDateStart { get; set; }
+        public string Phone { get; set; }
 
 
         public void CreateMappings(IConfiguration configuration)
         {
-            configuration.CreateMap<Employee, EmployeeViewModel>("Employee")
-                .ForMember(m => m.EmployeeFullName, opt => opt.MapFrom(s => s.Person.FullName))
+            configuration.CreateMap<Client, ClientViewModel>("Client")
+                .ForMember(m => m.ClientFullName, opt => opt.MapFrom(s => s.Person.FullName))
                 .ForMember(m => m.LastName, opt => opt.MapFrom(s => s.Person.LastName))
                 .ForMember(m => m.FirstName, opt => opt.MapFrom(s => s.Person.FirstName))
                 .ForMember(m => m.MiddleName, opt => opt.MapFrom(s => s.Person.MiddleName));
 
-            configuration.CreateMap<EmployeeViewModel, Employee>("Employee")
+            configuration.CreateMap<ClientViewModel, Client>("Client")
                 .ForMember(m => m.Person, opt => opt.MapFrom(s => s));
 
-            configuration.CreateMap<EmployeeViewModel, Person>("Employee");
+            configuration.CreateMap<ClientViewModel, Person>("Client");
         }
     }
 

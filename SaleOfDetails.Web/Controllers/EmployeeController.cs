@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
@@ -8,9 +9,11 @@ using System.Net;
 using System.Net.Http;
 using System.Web.Http;
 using System.Web.Http.Description;
+using AutoMapper;
 using SaleOfDetails.Domain.Context;
 using SaleOfDetails.Domain.DataAccess.Interfaces;
 using SaleOfDetails.Domain.Models;
+using SaleOfDetails.Web.Models;
 
 namespace SaleOfDetails.Web.Controllers
 {
@@ -22,37 +25,53 @@ namespace SaleOfDetails.Web.Controllers
         }
 
         // GET: api/Employee
-        public IQueryable<Employee> GetEmployees()
+        public IEnumerable<EmployeeViewModel> GetEmployees()
         {
-            return UnitOfWork.Repository<Employee>().GetQ();
+            var employees = UnitOfWork.Repository<Employee>()
+                .Get(includeProperties: "Person");
+
+            var employeeViewModels = Mapper.Map<IEnumerable<Employee>, IEnumerable<EmployeeViewModel>>(employees);
+
+            return employeeViewModels;
         }
 
         // GET: api/Employee/5
         [ResponseType(typeof(Employee))]
         public IHttpActionResult GetEmployee(int id)
         {
-            Employee employee = UnitOfWork.Repository<Employee>().GetById(id);
+            var employee = UnitOfWork.Repository<Employee>()
+                .Get(x => x.EmployeeId == id, includeProperties: "Person")
+                .SingleOrDefault();
             if (employee == null)
             {
                 return NotFound();
             }
 
-            return Ok(employee);
+            var employeeViewModel = Mapper.Map<Employee, EmployeeViewModel>(employee);
+
+            return Ok(employeeViewModel);
         }
 
         // PUT: api/Employee/5
         [ResponseType(typeof(void))]
-        public IHttpActionResult PutEmployee(int id, Employee employee)
+        public IHttpActionResult PutEmployee(EmployeeViewModel viewModel)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            if (id != employee.EmployeeId)
+            var employee = UnitOfWork.Repository<Employee>()
+                .Get(x => x.EmployeeId == viewModel.EmployeeId)
+                .SingleOrDefault();
+            if (employee == null)
             {
                 return BadRequest();
             }
+
+            Mapper.Map<EmployeeViewModel, Employee>(viewModel, employee);
+            employee.Person.UpdatedAt = DateTime.Now;
+            employee.UpdatedAt = DateTime.Now;
 
             UnitOfWork.Repository<Employee>().Update(employee);
 
@@ -62,7 +81,7 @@ namespace SaleOfDetails.Web.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!EmployeeExists(id))
+                if (!EmployeeExists(viewModel.EmployeeId))
                 {
                     return NotFound();
                 }
@@ -77,17 +96,22 @@ namespace SaleOfDetails.Web.Controllers
 
         // POST: api/Employee
         [ResponseType(typeof(Employee))]
-        public IHttpActionResult PostEmployee(Employee employee)
+        public IHttpActionResult PostEmployee(EmployeeViewModel viewModel)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
+            var employee = Mapper.Map<EmployeeViewModel, Employee>(viewModel);
+            employee.Person.CreatedAt = DateTime.Now;
+            employee.CreatedAt = DateTime.Now;          
+
             UnitOfWork.Repository<Employee>().Insert(employee);
             UnitOfWork.Save();
 
-            return CreatedAtRoute("DefaultApi", new { id = employee.EmployeeId }, employee);
+            return Ok();
+            // return CreatedAtRoute("DefaultApi", new { id = employee.EmployeeId }, employee);
         }
 
         // DELETE: api/Employee/5

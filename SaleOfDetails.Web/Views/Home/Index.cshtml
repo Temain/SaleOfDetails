@@ -1,7 +1,22 @@
-﻿@section SPAViews {
-    @Html.Partial("_Home")
+﻿@Html.Partial("_Alert")
+
+@section SPAViews {
+    @Html.Partial("_Sale")
+    @Html.Partial("_CreateSale")
+    @Html.Partial("_EditSale")
+
+    @Html.Partial("_Product")
+    @Html.Partial("_CreateProduct")
+    @Html.Partial("_EditProduct")
+
     @Html.Partial("_Employee")
+    @Html.Partial("_CreateEmployee")
+    @Html.Partial("_EditEmployee")
+
     @Html.Partial("_Client")
+    @Html.Partial("_CreateClient")
+    @Html.Partial("_EditClient")
+
     @Html.Partial("_Report")
 }
 @section Scripts{

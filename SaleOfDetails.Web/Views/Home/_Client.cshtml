@@ -1,6 +1,7 @@
-﻿<!-- ko with: clients -->
+﻿<!-- ko with: client -->
 <div class="heading">
-    <h1>Клиенты</h1>
+    <h1>Покупатели</h1>
+    <a href="/#client/create"><i class="fa fa-plus"></i> Добавить</a>
 </div>
 <div class="row">
     <section class="col-md-24">
@@ -8,17 +9,20 @@
             <thead>
                 <tr>
                     <td class="text-center">№</td>
+                    <td>ФИО</td>
+                    <td class="text-center">Телефон</td>
+                    <td class="text-center">Действия</td>
                 </tr>
             </thead>
-            <tbody>
+            <tbody data-bind="foreach: list">
                 <tr>
-                    <td class="text-center">1</td>
-                </tr>
-                <tr>
-                    <td class="text-center">2</td>
-                </tr>
-                <tr>
-                    <td class="text-center">3</td>
+                    <td class="text-center" data-bind="text: $index() + 1"></td>
+                    <td data-bind="text: clientFullName()"></td>
+                    <td class="text-center" data-bind="text: phone"></td>
+                    <td class="text-center">
+                        <a href="#" data-bind="attr : { href: '/#client/' + clientId() }"><i class="fa fa-pencil"></i></a>
+                        <a href="#" data-bind="click: $parent.removeClient"><i class="fa fa-times"></i></a>
+                    </td>
                 </tr>
             </tbody>
         </table>

@@ -31,19 +31,16 @@ namespace SaleOfDetails.Domain.Models
         /// <summary>
         /// Дата создания записи
         /// </summary>
-        [JsonIgnore]
         public DateTime? CreatedAt { get; set; }
 
         /// <summary>
         /// Дата обновления записи
         /// </summary>
-        [JsonIgnore]
         public DateTime? UpdatedAt { get; set; }
 
         /// <summary>
         /// Дата удаления записи
         /// </summary>
-        [JsonIgnore]
         public DateTime? DeletedAt { get; set; }
 
         public ICollection<Sale> Sales { get; set; }

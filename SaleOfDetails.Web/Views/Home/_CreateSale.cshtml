@@ -1,0 +1,68 @@
+﻿<!-- ko with: createSale -->
+<div class="heading">
+    <a href="#" data-bind="click: $root.navigateToSale"><i class="fa fa-arrow-circle-left"></i></a>
+    <h1>Добавление информации о продаже</h1>
+</div>
+<form class="form-horizontal">
+    <div class="form-group">
+        <label for="product" class="col-sm-4 control-label">Деталь / спецтехника</label>
+        <div class="col-sm-20">
+            <input type="text" id="product" class="form-control" data-bind="typeahead: { api: '/api/Product', data : $data, key: 'productId' }, textInput: productName" data-provide="typeahead" placeholder="Введите название" autocomplete="off" value=""/>
+            <input type="hidden" data-bind="value: productId"/>
+            <div class="text-danger msg-text" style="display: none">
+                <span class="glyphicon glyphicon glyphicon-exclamation-sign form-control-feedback"></span><span>Не найдено</span>
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="numberOfProducts" class="col-sm-4 control-label">Количество</label>
+        <div class="col-sm-20">
+            <div class='input-group'>
+                <input type='text' id='numberOfProducts' class="form-control" data-bind="numeric : {}, value: numberOfProducts" />
+                <span class="input-group-addon">
+                    <i class="" aria-hidden="true">шт.</i>
+                </span>
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="client" class="col-sm-4 control-label">Покупатель</label>
+        <div class="col-sm-20">
+            <select id="client" class="form-control" data-bind="value: clientId, options: clients, optionsText: 'clientFullName', optionsValue: 'clientId', optionsCaption: ''"></select>
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="employee" class="col-sm-4 control-label">Продавец</label>
+        <div class="col-sm-20">
+            <select id="employee" class="form-control" data-bind="value: employeeId, options: employees, optionsText: 'employeeFullName', optionsValue: 'employeeId', optionsCaption: ''"></select>
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="totalCost" class="col-sm-4 control-label">Общая стоимость</label>
+        <div class="col-sm-20">
+            <div class='input-group' >
+                <input type='text' id='totalCost' class="form-control" data-bind="numeric : {}, value: totalCost"/>
+                <span class="input-group-addon">
+                    <i class="" aria-hidden="true">руб.</i>
+                </span>
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="saleDate" class="col-sm-4 control-label">Дата продажи</label>
+        <div class="col-sm-20">
+            <div class='input-group date'>
+                <input type='text' id='saleDate' class="form-control" data-bind="datepicker: saleDate, datepickerOptions : { locale: 'ru', format: 'DD.MM.YYYY' }" />
+                <span class="input-group-addon">
+                    <i class="fa fa-calendar" aria-hidden="true"></i>
+                </span>
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-sm-offset-4 col-sm-20">
+            <button type="submit" class="btn btn-default" data-bind="click: save">Сохранить</button>
+        </div>
+    </div>
+</form>
+<!-- /ko -->

@@ -1,0 +1,39 @@
+﻿<!-- ko with: sale -->
+<div class="heading">
+    <h1>Продажи</h1>
+    <a href="/#sale/create"><i class="fa fa-plus"></i> Добавить</a>
+</div>
+<div class="row">
+    <section class="col-md-24">
+        <table class="table table-striped table-bordered table-hover">
+            <thead>
+            <tr>
+                <td class="text-center">№</td>
+                <td>Название детали / спецтехники</td>
+                <td class="text-center">Количество</td>
+                <td class="text-center">Общая стоимость</td>
+                <td>ФИО покупателя</td>
+                <td>ФИО продавца</td>
+                <td class="text-center">Дата продажи</td>
+                <td class="text-center">Действия</td>
+            </tr>
+            </thead>
+            <tbody data-bind="foreach: list">
+                <tr>
+                    <td class="text-center" data-bind="text: $index() + 1"></td>
+                    <td data-bind="text: productName()"></td>
+                    <td class="text-center" data-bind="text: numberOfProducts()"></td>
+                    <td class="text-center" data-bind="text: totalCostView()"></td>
+                    <td data-bind="text: clientFullName()"></td>
+                    <td data-bind="text: employeeFullName()"></td>
+                    <td class="text-center" data-bind="text: saleDate() != null ? moment(saleDate()).format('DD.MM.YYYY') : ''"></td>
+                    <td class="text-center">
+                        <a href="#" data-bind="attr : { href: '/#sale/' + saleId() }"><i class="fa fa-pencil"></i></a>
+                        <a href="#" data-bind="click: $parent.removeSale"><i class="fa fa-times"></i></a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </section>
+</div>
+<!-- /ko -->

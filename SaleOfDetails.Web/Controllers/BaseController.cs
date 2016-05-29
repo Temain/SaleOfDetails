@@ -20,8 +20,8 @@ namespace SaleOfDetails.Web.Controllers
         }
 
         public IUnitOfWork UnitOfWork { get; protected set; }
-
         private Logger _logger;
+
         public Logger Logger
         {
             get

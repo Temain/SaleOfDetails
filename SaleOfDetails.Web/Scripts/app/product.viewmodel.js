@@ -1,13 +1,13 @@
-﻿var EmployeeViewModel = function (app, dataModel) {
+﻿var ProductViewModel = function (app, dataModel) {
     var self = this;
 
     self.list = ko.observableArray([]);
 
     Sammy(function () {
-        this.get('#employee', function () {
+        this.get('#product', function () {
             $.ajax({
                 method: 'get',
-                url: '/api/Employee',
+                url: '/api/Product',
                 contentType: "application/json; charset=utf-8",
                 headers: {
                     'Authorization': 'Bearer ' + app.dataModel.getAccessToken()
@@ -20,18 +20,18 @@
         });
     });
 
-    self.removeEmployee = function (employee) {
+    self.removeProduct = function (product) {
         $.ajax({
             method: 'delete',
-            url: '/api/Employee/' + employee.employeeId(),
+            url: '/api/Product/' + product.productId(),
             data: JSON.stringify(ko.toJS(self)),
             contentType: "application/json; charset=utf-8",
             headers: {
                 'Authorization': 'Bearer ' + app.dataModel.getAccessToken()
             },
             success: function (response) {
-                self.list.remove(employee);
-                showAlert('success', 'Сотрудник успешно удалён.');
+                self.list.remove(product);
+                showAlert('success', 'Товар успешно удалён.');
             }
         });
     }
@@ -39,19 +39,19 @@
     return self;
 }
 
-var EditEmployeeViewModel = function(app, dataModel) {
+var EditProductViewModel = function(app, dataModel) {
     var self = this;
 
-    self.lastName = ko.observable().extend({
+    self.productName = ko.observable().extend({
         required: {
             params: true,
-            message: "Необходимо указать фамилию."
+            message: "Необходимо указать название."
         }
     });
-    self.firstName = ko.observable().extend({
+    self.cost = ko.observable().extend({
         required: {
             params: true,
-            message: "Необходимо указать имя."
+            message: "Необходимо указать цену."
         }
     });
 
@@ -65,28 +65,28 @@ var EditEmployeeViewModel = function(app, dataModel) {
 
         $.ajax({
             method: 'put',
-            url: '/api/Employee/',
+            url: '/api/Product/',
             data: JSON.stringify(ko.toJS(self)),
             contentType: "application/json; charset=utf-8",
             headers: {
                 'Authorization': 'Bearer ' + app.dataModel.getAccessToken()
             },
             success: function (response) {
-                app.navigateToEmployee();
+                app.navigateToProduct();
                 showAlert('success', 'Изменения успешно сохранены.');
             }
         });
     }
 
     Sammy(function () {
-        this.get('#employee/:id', function () {
+        this.get('#product/:id', function () {
             var id = this.params['id'];
             if (id === 'create') {
-                app.view(app.Views.CreateEmployee);
+                app.view(app.Views.CreateProduct);
             } else {
                 $.ajax({
                     method: 'get',
-                    url: '/api/Employee/' + id,
+                    url: '/api/Product/' + id,
                     contentType: "application/json; charset=utf-8",
                     headers: {
                         'Authorization': 'Bearer ' + app.dataModel.getAccessToken()
@@ -101,38 +101,22 @@ var EditEmployeeViewModel = function(app, dataModel) {
     });
 }
 
-var CreateEmployeeViewModel = function (app, dataModel) {
+var CreateProductViewModel = function (app, dataModel) {
     var self = this;
 
-    self.lastName = ko.observable().extend({
+    self.productName = ko.observable().extend({
         required: {
             params: true,
-            message: "Необходимо указать фамилию."
+            message: "Необходимо указать название."
         }
     });
-    self.firstName = ko.observable().extend({
+    self.cost = ko.observable().extend({
         required: {
             params: true,
-            message: "Необходимо указать имя."
+            message: "Необходимо указать цену."
         }
     });
-    self.middleName = ko.observable();
-    self.employeeDateStart = ko.observable(moment());
-
-    //self.validationObject = ko.validatedObservable({
-    //    lastName: self.lastName.extend({
-    //        required: {
-    //            params: true,
-    //            message: "Необходимо указать фамилию."
-    //        }
-    //    }),
-    //    firstName: self.firstName.extend({
-    //        required: {
-    //            params: true,
-    //            message: "Необходимо указать имя."
-    //        }
-    //    })
-    //});
+    self.inStock = ko.observable();
 
     self.save = function() {
         var result = ko.validation.group(self, { deep: true });
@@ -144,7 +128,7 @@ var CreateEmployeeViewModel = function (app, dataModel) {
 
         $.ajax({
             method: 'post',
-            url: '/api/Employee/',
+            url: '/api/Product/',
             data: JSON.stringify(ko.toJS(self)),
             contentType: "application/json; charset=utf-8",
             headers: {
@@ -154,34 +138,33 @@ var CreateEmployeeViewModel = function (app, dataModel) {
                 // showAlert('danger', 'Произошла ошибка при добавлении сотрудника. Обратитесь в службу технической поддержки.');
             },
             success: function (response) {
-                self.lastName('');
-                self.firstName('');
-                self.middleName('');
-                self.employeeDateStart('');
+                self.productName('');
+                self.cost('');
+                self.inStock('');
 
                 result.showAllMessages(false);
 
-                app.navigateToEmployee();
-                showAlert('success', 'Сотрудник успешно добавлен.');
+                app.navigateToProduct();
+                showAlert('success', 'Товар успешно добавлен.');
             }
         });
     }
 }
 
 app.addViewModel({
-    name: "Employee",
-    bindingMemberName: "employee",
-    factory: EmployeeViewModel
+    name: "Product",
+    bindingMemberName: "product",
+    factory: ProductViewModel
 });
 
 app.addViewModel({
-    name: "EditEmployee",
-    bindingMemberName: "editEmployee",
-    factory: EditEmployeeViewModel
+    name: "EditProduct",
+    bindingMemberName: "editProduct",
+    factory: EditProductViewModel
 });
 
 app.addViewModel({
-    name: "CreateEmployee",
-    bindingMemberName: "createEmployee",
-    factory: CreateEmployeeViewModel
+    name: "CreateProduct",
+    bindingMemberName: "createProduct",
+    factory: CreateProductViewModel
 });

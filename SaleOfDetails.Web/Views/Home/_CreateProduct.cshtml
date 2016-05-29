@@ -1,0 +1,41 @@
+﻿<!-- ko with: createProduct -->
+<div class="heading">
+    <a href="#" data-bind="click: $root.navigateToProduct"><i class="fa fa-arrow-circle-left"></i></a>
+    <h1>Добавление товара</h1>
+</div>
+<form class="form-horizontal">
+    <div class="form-group">
+        <label for="lastName" class="col-sm-4 control-label">Название</label>
+        <div class="col-sm-20">
+            <input class="form-control" id="lastName" data-bind="value: productName">
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="cost" class="col-sm-4 control-label">Цена</label>
+        <div class="col-sm-20">
+            <div class='input-group'>
+                <input type='text' id='cost' class="form-control" data-bind="numeric : {}, value: cost" />
+                <span class="input-group-addon">
+                    <i aria-hidden="true">руб.</i>
+                </span>
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="inStock" class="col-sm-4 control-label">В наличии</label>
+        <div class="col-sm-20">
+            <div class='input-group'>
+                <input type='text' id='inStock' class="form-control" data-bind="numeric : {}, value: inStock" />
+                <span class="input-group-addon">
+                    <i class="" aria-hidden="true">шт.</i>
+                </span>
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-sm-offset-4 col-sm-20">
+            <button type="submit" class="btn btn-default" data-bind="click: save">Сохранить</button>
+        </div>
+    </div>
+</form>
+<!-- /ko -->

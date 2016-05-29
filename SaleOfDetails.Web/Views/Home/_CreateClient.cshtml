@@ -1,0 +1,42 @@
+﻿<!-- ko with: createClient -->
+<div class="heading">
+    <a href="#" data-bind="click: $root.navigateToClient"><i class="fa fa-arrow-circle-left"></i></a>
+    <h1>Добавление покупателя</h1>
+</div>
+<form class="form-horizontal">
+    <div class="form-group">
+        <label for="lastName" class="col-sm-4 control-label">Фамилия</label>
+        <div class="col-sm-20">
+            <input class="form-control" id="lastName" data-bind="value: lastName">
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="firstName" class="col-sm-4 control-label">Имя</label>
+        <div class="col-sm-20">
+            <input class="form-control" id="firstName" data-bind="value: firstName">
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="middleName" class="col-sm-4 control-label">Отчество</label>
+        <div class="col-sm-20">
+            <input class="form-control" id="middleName" data-bind="value: middleName">
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="phone" class="col-sm-4 control-label">Телефон</label>
+        <div class="col-sm-20">
+            <div class='input-group'>
+                <input type='text' id='phone' class="form-control" data-bind="value: phone" />
+                <span class="input-group-addon">
+                    <i class="fa fa-phone" aria-hidden="true"></i>
+                </span>
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-sm-offset-4 col-sm-20">
+            <button type="submit" class="btn btn-default" data-bind="click: save">Сохранить</button>
+        </div>
+    </div>
+</form>
+<!-- /ko -->

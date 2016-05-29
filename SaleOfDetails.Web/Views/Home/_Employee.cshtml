@@ -1,18 +1,29 @@
-﻿<!-- ko with: employees -->
+﻿<!-- ko with: employee -->
 <div class="heading">
     <h1>Сотрудники</h1>
+    <a href="/#employee/create"><i class="fa fa-plus"></i> Добавить</a>
 </div>
+
 <div class="row">
     <section class="col-md-24">
         <table class="table table-striped table-bordered table-hover">
             <thead>
                 <tr>
                     <td class="text-center">№</td>
+                    <td>ФИО</td>
+                    <td class="text-center">Дата приёма на работу</td>
+                    <td class="text-center">Действия</td>
                 </tr>
             </thead>
             <tbody data-bind="foreach: list">
                 <tr>
-                    <td class="text-center" data-bind="text: $index()"></td>               
+                    <td class="text-center" data-bind="text: $index() + 1"></td>
+                    <td data-bind="text: employeeFullName()"></td>
+                    <td class="text-center" data-bind="text: employeeDateStart() != null ? moment(employeeDateStart()).format('DD.MM.YYYY') : ''"></td>
+                    <td class="text-center">
+                        <a href="#" data-bind="attr : { href: '/#employee/' + employeeId() }"><i class="fa fa-pencil"></i></a>
+                        <a href="#" data-bind="click: $parent.removeEmployee"><i class="fa fa-times"></i></a>
+                    </td>
                 </tr>
             </tbody>
         </table>
