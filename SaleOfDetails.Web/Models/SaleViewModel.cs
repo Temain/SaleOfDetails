@@ -55,6 +55,8 @@ namespace SaleOfDetails.Web.Models
         /// </summary>
         public int ClientId { get; set; }
 
+        public string ClientShortName { get; set; }
+
         public string ClientFullName { get; set; }
 
         public IEnumerable<ClientViewModel> Clients { get; set; } 
@@ -63,6 +65,8 @@ namespace SaleOfDetails.Web.Models
         /// Сотрудник / продавец
         /// </summary>
         public int EmployeeId { get; set; }
+
+        public string EmployeeShortName { get; set; }
 
         public string EmployeeFullName { get; set; }
 
@@ -79,7 +83,9 @@ namespace SaleOfDetails.Web.Models
             configuration.CreateMap<Sale, SaleViewModel>("Sale")
                 .ForMember(m => m.ProductName, opt => opt.MapFrom(s => s.Product.ProductName))
                 .ForMember(m => m.ProductCost, opt => opt.MapFrom(s => s.Product.Cost))
+                .ForMember(m => m.EmployeeShortName, opt => opt.MapFrom(s => s.Employee.Person.ShortName))
                 .ForMember(m => m.EmployeeFullName, opt => opt.MapFrom(s => s.Employee.Person.FullName))
+                .ForMember(m => m.ClientShortName, opt => opt.MapFrom(s => s.Client.Person.ShortName))
                 .ForMember(m => m.ClientFullName, opt => opt.MapFrom(s => s.Client.Person.FullName))
                 .ForMember(m => m.TotalCostView, opt => opt.MapFrom(s => s.NumberOfProducts*s.Product.Cost));
 

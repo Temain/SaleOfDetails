@@ -1,13 +1,13 @@
 ﻿<!-- ko with: createSale -->
 <div class="heading">
-    <a href="#" data-bind="click: $root.navigateToSale"><i class="fa fa-arrow-circle-left"></i></a>
-    <h1>Добавление информации о продаже</h1>
+    <a href="#" class="back-link" data-bind="click: $root.navigateToSale, tooltip: { title: 'Вернуться назад', placement: 'bottom', trigger: 'hover' }"><i class="fa fa-arrow-circle-left"></i></a>
+    <h2>Добавление информации о продаже</h2>
 </div>
 <form class="form-horizontal">
     <div class="form-group">
         <label for="product" class="col-sm-4 control-label">Деталь / спецтехника</label>
         <div class="col-sm-20">
-            <input type="text" id="product" class="form-control" data-bind="typeahead: { api: '/api/Product', data : $data, key: 'productId' }, textInput: productName" data-provide="typeahead" placeholder="Введите название" autocomplete="off" value=""/>
+            <input type="text" id="product" class="form-control" data-bind="typeahead: { api: '/api/Product', data : $data, key: 'productId' }, value: productName" data-provide="typeahead" placeholder="Введите название" autocomplete="off" value=""/>
             <input type="hidden" data-bind="value: productId"/>
             <div class="text-danger msg-text" style="display: none">
                 <span class="glyphicon glyphicon glyphicon-exclamation-sign form-control-feedback"></span><span>Не найдено</span>
@@ -61,7 +61,7 @@
     </div>
     <div class="form-group">
         <div class="col-sm-offset-4 col-sm-20">
-            <button type="submit" class="btn btn-default" data-bind="click: save">Сохранить</button>
+            <button type="submit" class="btn btn-primary" data-bind="click: save"><span class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></span> Сохранить</button>
         </div>
     </div>
 </form>

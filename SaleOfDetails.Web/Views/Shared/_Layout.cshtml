@@ -12,16 +12,16 @@
 <body style="display: none" data-bind="visible: true">
     <div class="wrapper container">
         <header>
-            <a href="/"><img src="" alt="ОАО АТМ-Кубань"></a>
+            <a class="brand" href="/">ОАО АТМ-Кубань</a>
             @Html.Partial("_LoginPartial")
         </header>
-        <nav class="navbar navbar-default">
+        <nav class="main-menu navbar navbar-default">
             <ul class="nav navbar-nav">
-                <li><a href="#" class="active" data-bind="click: navigateToSale">Продажи</a></li>
-                <li><a href="#" class="active" data-bind="click: navigateToProduct">Товары</a></li>
-                <li><a href="#" data-bind="click: navigateToClient">Покупатели</a></li>
-                <li><a href="#" data-bind="click: navigateToEmployee">Сотрудники</a></li>
-                <li><a href="#" data-bind="click: navigateToReport">Отчёты</a></li>
+                <li class="sale"><a href="#" data-bind="click: navigateToSale"><i class="fa fa-shopping-cart" aria-hidden="true"></i> Продажи</a></li>
+                <li class="product"><a href="#" data-bind="click: navigateToProduct"><i class="fa fa-barcode" aria-hidden="true"></i> Товары</a></li>
+                <li class="client"><a href="#" data-bind="click: navigateToClient"><i class="fa fa-users" aria-hidden="true"></i> Покупатели</a></li>
+                <li class="employee"><a href="#" data-bind="click: navigateToEmployee"><i class="fa fa-sitemap" aria-hidden="true"></i> Сотрудники</a></li>
+                <li class="report"><a href="#" data-bind="click: navigateToReport"><i class="fa fa-line-chart" aria-hidden="true"></i> Отчёты</a></li>
             </ul>
         </nav>
         @RenderBody()

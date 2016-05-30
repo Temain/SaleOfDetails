@@ -28,11 +28,40 @@ namespace SaleOfDetails.Web.Controllers
         public IEnumerable<EmployeeViewModel> GetEmployees()
         {
             var employees = UnitOfWork.Repository<Employee>()
-                .Get(includeProperties: "Person");
+                .Get(
+                    orderBy: o => o.OrderBy(p => p.Person.LastName)
+                        .ThenBy(p => p.Person.FirstName),
+                    includeProperties: "Person");
 
             var employeeViewModels = Mapper.Map<IEnumerable<Employee>, IEnumerable<EmployeeViewModel>>(employees);
 
             return employeeViewModels;
+        }
+
+        // GET: api/Employee
+        public ListViewModel<EmployeeViewModel> GetEmployees(int page, int pageSize = 10)
+        {
+            var employeesList = UnitOfWork.Repository<Employee>()
+                .GetQ(
+                    orderBy: o => o.OrderBy(p => p.Person.LastName)
+                        .ThenBy(p => p.Person.FirstName),
+                    includeProperties: "Person");
+                
+            var employees = employeesList
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
+                .ToList();
+
+            var employeeViewModels = Mapper.Map<IEnumerable<Employee>, IEnumerable<EmployeeViewModel>>(employees);
+            var viewModel = new ListViewModel<EmployeeViewModel>
+            {
+                Items = employeeViewModels,
+                ItemsCount = employeesList.Count(),
+                PagesCount = (int)Math.Ceiling((double)employeesList.Count() / pageSize),
+                SelectedPage = page
+            };
+
+            return viewModel;
         }
 
         // GET: api/Employee/5

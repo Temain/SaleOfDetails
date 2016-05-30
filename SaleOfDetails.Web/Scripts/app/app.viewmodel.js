@@ -71,6 +71,11 @@
         self["navigateTo" + options.name] = navigator;
     };
 
+    self.markLinkAsActive = function (liClass) {
+        $('.main-menu > ul > li').removeClass('active');
+        $('.main-menu > ul > li.' + liClass).addClass('active');
+    };
+
     self.initialize = function () {
         Sammy().run();
     }

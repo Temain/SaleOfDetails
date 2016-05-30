@@ -85,21 +85,20 @@ namespace SaleOfDetails.Domain.Models
         }
 
         /// <summary>
-        /// Инициалы и фамилия: И.И. Иванов
+        /// Инициалы и фамилия: Иванов И.И.
         /// </summary>
         public string ShortName
         {
             get
             {
                 const string initialTerminator = ".";
-                var shortName = FirstName[0] + initialTerminator;
+                var shortName = LastName + " " + FirstName[0] + initialTerminator;
+                if (!String.IsNullOrEmpty(MiddleName))
+                {
+                    shortName += MiddleName[0] + initialTerminator;
+                }
 
-                if (String.IsNullOrEmpty(MiddleName))
-                    shortName += LastName;
-                else
-                    shortName += MiddleName[0] + initialTerminator + " " + LastName;
-
-                return shortName;     
+                return shortName;
             }
         }
 

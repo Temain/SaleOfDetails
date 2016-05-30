@@ -1,7 +1,7 @@
 ﻿<!-- ko with: editEmployee -->
 <div class="heading">
-    <a href="#" data-bind="click: $root.navigateToEmployee"><i class="fa fa-arrow-circle-left"></i></a>
-    <h1>Редактирование информации о сотруднике</h1>
+    <a href="#" class="back-link" data-bind="click: $root.navigateToEmployee, tooltip: { title: 'Вернуться назад', placement: 'bottom', trigger: 'hover' }"><i class="fa fa-arrow-circle-left"></i></a>
+    <h2>Редактирование информации о сотруднике</h2>
 </div>
 <form class="form-horizontal">
     <div class="form-group">
@@ -35,7 +35,7 @@
     </div>
     <div class="form-group">
         <div class="col-sm-offset-4 col-sm-20">
-            <button type="submit" class="btn btn-default" data-bind="click: save">Сохранить</button>
+            <button type="submit" class="btn btn-primary" data-bind="click: save"><span class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></span> Сохранить</button>
         </div>
     </div>
 </form>

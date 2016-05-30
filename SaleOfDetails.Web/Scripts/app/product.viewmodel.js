@@ -2,23 +2,53 @@
     var self = this;
 
     self.list = ko.observableArray([]);
+    self.selectedPage = ko.observable(1);
+    self.pageSizes = ko.observableArray([10, 25, 50, 100, 200]);
+    self.selectedPageSize = ko.observable(10);
+    self.productsCount = ko.observable();
+    self.pagesCount = ko.observable();
+
+    self.selectedPageChanged = function (page) {
+        if (page > 0 && page <= self.pagesCount()) {
+            self.selectedPage(page);
+            self.loadProducts();
+
+            window.scrollTo(0, 0);
+        }
+    }
+
+    self.pageSizeChanged = function () {
+        self.selectedPage(1);
+        self.loadProducts();
+
+        window.scrollTo(0, 0);
+    };
 
     Sammy(function () {
         this.get('#product', function () {
-            $.ajax({
-                method: 'get',
-                url: '/api/Product',
-                contentType: "application/json; charset=utf-8",
-                headers: {
-                    'Authorization': 'Bearer ' + app.dataModel.getAccessToken()
-                },
-                success: function (response) {
-                    ko.mapping.fromJS(response, {}, self.list);
-                    app.view(self);
-                }
-            });
+            app.markLinkAsActive('product');
+
+            self.loadProducts();
         });
     });
+
+    self.loadProducts = function () {
+        $.ajax({
+            method: 'get',
+            url: '/api/Product',
+            data: { page: self.selectedPage(), pageSize: self.selectedPageSize() },
+            contentType: "application/json; charset=utf-8",
+            headers: {
+                'Authorization': 'Bearer ' + app.dataModel.getAccessToken()
+            },
+            success: function (response) {
+                ko.mapping.fromJS(response.items, {}, self.list);
+                self.pagesCount(response.pagesCount);
+                self.productsCount(response.itemsCount);
+                app.view(self);
+            }
+        });
+    }
 
     self.removeProduct = function (product) {
         $.ajax({
@@ -80,6 +110,8 @@ var EditProductViewModel = function(app, dataModel) {
 
     Sammy(function () {
         this.get('#product/:id', function () {
+            app.markLinkAsActive('product');
+
             var id = this.params['id'];
             if (id === 'create') {
                 app.view(app.Views.CreateProduct);

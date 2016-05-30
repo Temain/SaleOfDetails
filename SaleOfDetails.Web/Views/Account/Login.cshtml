@@ -19,11 +19,11 @@
 <body>
     <div class="wrapper container">
         <header>
-            <a href="/"><img src="" alt="ОАО АТМ-Кубань"></a>
+            <a class="brand" href="/">ОАО АТМ-Кубань</a>
             @*@Html.Partial("_LoginPartial")*@
         </header>
         <div class="heading">
-            <h1>@ViewBag.Title</h1>
+            <h2>@ViewBag.Title</h2>
         </div>
         <div class="row">
             <div class="col-md-24">
@@ -31,7 +31,7 @@
                     @using (Html.BeginForm("Login", "Account", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
                     {
                         @Html.AntiForgeryToken()
-                        <h4>Используйте локальную учетную запись для входа.</h4>
+                        <h4>Введите имя пользователя и пароль.</h4>
                         <hr />
                         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
                         <div class="form-group">
@@ -58,7 +58,7 @@
                         </div>*@
                         <div class="form-group">
                             <div class="col-md-offset-4 col-md-10">
-                                <input type="submit" value="Выполнить вход" class="btn btn-default" />
+                                <input type="submit" value="Выполнить вход" class="btn btn-primary" />
                             </div>
                         </div>
                         @*<p>

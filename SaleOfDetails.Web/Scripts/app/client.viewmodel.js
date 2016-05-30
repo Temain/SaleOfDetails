@@ -2,23 +2,53 @@
     var self = this;
 
     self.list = ko.observableArray([]);
+    self.selectedPage = ko.observable(1);
+    self.pageSizes = ko.observableArray([10, 25, 50, 100, 200]);
+    self.selectedPageSize = ko.observable(10);
+    self.clientsCount = ko.observable();
+    self.pagesCount = ko.observable();
+
+    self.selectedPageChanged = function (page) {
+        if (page > 0 && page <= self.pagesCount()) {
+            self.selectedPage(page);
+            self.loadClients();
+
+            window.scrollTo(0, 0); 
+        }
+    }
+
+    self.pageSizeChanged = function () {
+        self.selectedPage(1);
+        self.loadClients();
+
+        window.scrollTo(0, 0);
+    };
 
     Sammy(function () {
         this.get('#client', function () {
-            $.ajax({
-                method: 'get',
-                url: '/api/Client',
-                contentType: "application/json; charset=utf-8",
-                headers: {
-                    'Authorization': 'Bearer ' + app.dataModel.getAccessToken()
-                },
-                success: function (response) {
-                    ko.mapping.fromJS(response, {}, self.list);
-                    app.view(self);
-                }
-            });
+            app.markLinkAsActive('client');
+
+            self.loadClients();
         });
     });
+
+    self.loadClients = function () {
+        $.ajax({
+            method: 'get',
+            url: '/api/Client',
+            data: { page: self.selectedPage(), pageSize: self.selectedPageSize() },
+            contentType: "application/json; charset=utf-8",
+            headers: {
+                'Authorization': 'Bearer ' + app.dataModel.getAccessToken()
+            },
+            success: function (response) {
+                ko.mapping.fromJS(response.items, {}, self.list);
+                self.pagesCount(response.pagesCount);
+                self.clientsCount(response.itemsCount);
+                app.view(self);
+            }
+        });
+    }
 
     self.removeClient = function (client) {
         $.ajax({
@@ -80,6 +110,8 @@ var EditClientViewModel = function (app, dataModel) {
 
     Sammy(function () {
         this.get('#client/:id', function () {
+            app.markLinkAsActive('client');
+
             var id = this.params['id'];
             if (id === 'create') {
                 app.view(app.Views.CreateClient);

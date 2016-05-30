@@ -2,25 +2,55 @@
     var self = this;
 
     self.list = ko.observableArray([]);
+    self.selectedPage = ko.observable(1);
+    self.pageSizes = ko.observableArray([10, 25, 50, 100, 200]);
+    self.selectedPageSize = ko.observable(10);
+    self.salesCount = ko.observable();
+    self.pagesCount = ko.observable();
+
+    self.selectedPageChanged = function (page) {
+        if (page > 0 && page <= self.pagesCount()) {
+            self.selectedPage(page);
+            self.loadSales();
+
+            window.scrollTo(0, 0);
+        }
+    }
+
+    self.pageSizeChanged = function () {
+        self.selectedPage(1);
+        self.loadSales();
+
+        window.scrollTo(0, 0);
+    };
 
     Sammy(function () {
         this.get('#sale', function () {
-            $.ajax({
-                method: 'get',
-                url: '/api/Sale',
-                contentType: "application/json; charset=utf-8",
-                headers: {
-                    'Authorization': 'Bearer ' + app.dataModel.getAccessToken()
-                },
-                success: function (response) {
-                    ko.mapping.fromJS(response, {}, self.list);
-                    app.view(self);
-                }
-            });
+            app.markLinkAsActive('sale');
+
+            self.loadSales();
         });
 
         this.get('/', function () { this.app.runRoute('get', '#sale') });
     });
+
+    self.loadSales = function() {
+        $.ajax({
+            method: 'get',
+            url: '/api/Sale',
+            data: { page: self.selectedPage(), pageSize: self.selectedPageSize() },
+            contentType: "application/json; charset=utf-8",
+            headers: {
+                'Authorization': 'Bearer ' + app.dataModel.getAccessToken()
+            },
+            success: function (response) {
+                ko.mapping.fromJS(response.items, {}, self.list);
+                self.pagesCount(response.pagesCount);
+                self.salesCount(response.itemsCount);
+                app.view(self);
+            }
+        });
+    }
 
     self.removeSale = function (sale) {
         $.ajax({
@@ -107,6 +137,8 @@ var EditSaleViewModel = function(app, dataModel) {
 
     Sammy(function () {
         this.get('#sale/:id', function () {
+            app.markLinkAsActive('sale');
+
             var id = this.params['id'];
             if (id === 'create') {
                 $.ajax({

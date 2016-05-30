@@ -80,6 +80,12 @@ body {
 	.wrapper {
 		padding: 0 0 50px 0;
 
+        .brand {
+            color: #7e7e7e;
+            font-size: 1.8em;
+            font-weight: bold;
+        }
+
         .heading {
 			height: 40px;
 			margin: 30px 0;
@@ -93,6 +99,11 @@ body {
 				padding: 0 10px;
 				text-transform: uppercase;
 			}
+
+            h2 {
+                display: inline-block;
+                margin-left: 0.4em;
+            }
 		}
 	}
 
@@ -102,3 +113,67 @@ body {
 }
 
 .highcharts-container{width:100% !important; height:100% !important;}
+
+.main-menu > .nav {
+    display: table;
+    width: 100%;
+
+    li {
+        display: table-cell;
+        text-align: center;
+        white-space: nowrap;
+        float: none;
+
+        a {
+            font-size: 1.1em;
+
+            i {
+                font-size: 1.1em;
+                /*color: black;*/
+            }
+        }
+    }
+
+    /*li.active > a > i {
+        color: white
+    }*/
+}
+
+.login-partial {
+    margin-right: 0;
+
+    li {
+        a:hover {
+            background: none;
+        }
+    }
+} 
+
+.back-link {
+    display: inline-block;
+    font-size: 1.7em;
+}
+
+.create-link {
+    font-size: 1.1em;
+    margin-left: 1em;
+
+    i {
+        font-size: 1.2em;
+    }
+}
+
+.download-link {
+    display: block;
+    margin-left: 0.8em;
+
+    font-size: 1.1em;
+
+    i {
+        font-size: 1.2em;
+    }
+}
+
+.actions > a {
+    font-size: 1.2em;
+}

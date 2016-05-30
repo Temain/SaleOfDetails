@@ -28,11 +28,38 @@ namespace SaleOfDetails.Web.Controllers
         public IEnumerable<SaleViewModel> GetSales()
         {
             var sales = UnitOfWork.Repository<Sale>()
-                .Get(includeProperties: "Product, Employee, Employee.Person, Client, Client.Person");
+                .GetQ(
+                    orderBy: o => o.OrderByDescending(s => s.SaleDate),
+                    includeProperties: "Product, Employee, Employee.Person, Client, Client.Person");
 
             var saleViewModels = Mapper.Map<IEnumerable<Sale>, IEnumerable<SaleViewModel>>(sales);
 
             return saleViewModels;
+        }
+
+        // GET: api/Sale
+        public ListViewModel<SaleViewModel> GetSales(int page, int pageSize = 10)
+        {
+            var salesList = UnitOfWork.Repository<Sale>()
+                .GetQ(
+                    orderBy: o => o.OrderByDescending(s => s.SaleDate),
+                    includeProperties: "Product, Employee, Employee.Person, Client, Client.Person");
+
+            var sales = salesList
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
+                .ToList();
+
+            var saleViewModels = Mapper.Map<IEnumerable<Sale>, IEnumerable<SaleViewModel>>(sales);
+            var viewModel = new ListViewModel<SaleViewModel>
+            {
+                Items = saleViewModels,
+                ItemsCount = salesList.Count(),
+                PagesCount = (int)Math.Ceiling((double)salesList.Count() / pageSize),
+                SelectedPage = page
+            };
+
+            return viewModel;
         }
 
         // GET: api/Sale/5
@@ -54,10 +81,16 @@ namespace SaleOfDetails.Web.Controllers
                 saleViewModel = Mapper.Map<Sale, SaleViewModel>(sale);
             }
 
-            var clients = UnitOfWork.Repository<Client>().Get(includeProperties: "Person");
+            var clients = UnitOfWork.Repository<Client>()
+                .Get(orderBy: o => o.OrderBy(p => p.Person.LastName)
+                        .ThenBy(p => p.Person.FirstName),
+                    includeProperties: "Person");
             saleViewModel.Clients = Mapper.Map<IEnumerable<Client>, IEnumerable<ClientViewModel>>(clients);
 
-            var employees = UnitOfWork.Repository<Employee>().Get(includeProperties: "Person");
+            var employees = UnitOfWork.Repository<Employee>()
+                .Get(orderBy: o => o.OrderBy(p => p.Person.LastName)
+                        .ThenBy(p => p.Person.FirstName),
+                    includeProperties: "Person");
             saleViewModel.Employees = Mapper.Map<IEnumerable<Employee>, IEnumerable<EmployeeViewModel>>(employees);
 
             return Ok(saleViewModel);

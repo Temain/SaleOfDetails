@@ -28,11 +28,40 @@ namespace SaleOfDetails.Web.Controllers
         public IEnumerable<ClientViewModel> GetClients()
         {
             var clients = UnitOfWork.Repository<Client>()
-                .Get(includeProperties: "Person");
+                .Get(
+                    orderBy: o => o.OrderBy(p => p.Person.LastName)
+                        .ThenBy(p => p.Person.FirstName),
+                    includeProperties: "Person");
 
             var clientViewModels = Mapper.Map<IEnumerable<Client>, IEnumerable<ClientViewModel>>(clients);
 
             return clientViewModels;
+        }
+
+        // GET: api/Client
+        public ListViewModel<ClientViewModel> GetClients(int page, int pageSize = 10)
+        {
+            var clientsList = UnitOfWork.Repository<Client>()
+                .GetQ(
+                    orderBy: o => o.OrderBy(p => p.Person.LastName)
+                        .ThenBy(p => p.Person.FirstName),
+                    includeProperties: "Person");
+
+            var clients = clientsList
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
+                .ToList();
+
+            var clientViewModels = Mapper.Map<IEnumerable<Client>, IEnumerable<ClientViewModel>>(clients);
+            var viewModel = new ListViewModel<ClientViewModel>
+            {
+                Items = clientViewModels,
+                ItemsCount = clientsList.Count(),
+                PagesCount = (int)Math.Ceiling((double)clientsList.Count() / pageSize),
+                SelectedPage = page
+            };
+
+            return viewModel;
         }
 
         // GET: api/Client/5

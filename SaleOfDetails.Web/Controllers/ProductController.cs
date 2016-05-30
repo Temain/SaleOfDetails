@@ -28,11 +28,34 @@ namespace SaleOfDetails.Web.Controllers
         public IEnumerable<ProductViewModel> GetProducts()
         {
             var products = UnitOfWork.Repository<Product>()
-                .GetQ();
+                .GetQ(orderBy: o => o.OrderBy(p => p.CreatedAt));
 
             var productViewModels = Mapper.Map<IEnumerable<Product>, IEnumerable<ProductViewModel>>(products);
 
             return productViewModels;
+        }
+
+        // GET: api/Product
+        public ListViewModel<ProductViewModel> GetProducts(int page, int pageSize = 10)
+        {
+            var productsList = UnitOfWork.Repository<Product>()
+                .GetQ(orderBy: o => o.OrderBy(p => p.CreatedAt));
+
+            var products = productsList
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
+                .ToList();
+
+            var productViewModels = Mapper.Map<IEnumerable<Product>, IEnumerable<ProductViewModel>>(products);
+            var viewModel = new ListViewModel<ProductViewModel>
+            {
+                Items = productViewModels,
+                ItemsCount = productsList.Count(),
+                PagesCount = (int)Math.Ceiling((double)productsList.Count() / pageSize),
+                SelectedPage = page
+            };
+
+            return viewModel;
         }
 
         // GET: api/Product/?query=#{query}

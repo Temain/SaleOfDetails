@@ -1,32 +1,80 @@
 ﻿<!-- ko with: employee -->
 <div class="heading">
-    <h1>Сотрудники</h1>
-    <a href="/#employee/create"><i class="fa fa-plus"></i> Добавить</a>
+    <h2>Сотрудники</h2>
+    <a class="create-link" href="/#employee/create"><i class="fa fa-user-plus" aria-hidden="true"></i> Добавить</a>
 </div>
 
 <div class="row">
     <section class="col-md-24">
         <table class="table table-striped table-bordered table-hover">
             <thead>
-                <tr>
-                    <td class="text-center">№</td>
-                    <td>ФИО</td>
-                    <td class="text-center">Дата приёма на работу</td>
-                    <td class="text-center">Действия</td>
-                </tr>
+            <tr>
+                <th class="text-center">№</th>
+                <th>ФИО</th>
+                <th class="text-center">Дата приёма на работу</th>
+                <th class="text-center">Действия</th>
+            </tr>
             </thead>
             <tbody data-bind="foreach: list">
-                <tr>
-                    <td class="text-center" data-bind="text: $index() + 1"></td>
-                    <td data-bind="text: employeeFullName()"></td>
-                    <td class="text-center" data-bind="text: employeeDateStart() != null ? moment(employeeDateStart()).format('DD.MM.YYYY') : ''"></td>
-                    <td class="text-center">
-                        <a href="#" data-bind="attr : { href: '/#employee/' + employeeId() }"><i class="fa fa-pencil"></i></a>
-                        <a href="#" data-bind="click: $parent.removeEmployee"><i class="fa fa-times"></i></a>
-                    </td>
-                </tr>
+            <tr>
+                <td class="text-center" data-bind="text: ((($parent.selectedPage() - 1) * $parent.selectedPageSize()) + $index() + 1)"></td>
+                <td data-bind="text: employeeFullName()"></td>
+                <td class="text-center" data-bind="text: employeeDateStart() != null ? moment(employeeDateStart()).format('DD.MM.YYYY') : ''"></td>
+                <td class="text-center actions">
+                    <a href="#" data-bind="attr : { href: '/#employee/' + employeeId() }, tooltip: { title: 'Перейти к редактированию', placement: 'left', trigger: 'hover' }"><i class="fa fa-pencil"></i></a>
+                    <a href="#" data-bind="click: $parent.removeEmployee, tooltip: { title: 'Удалить', placement: 'bottom', trigger: 'hover' }"><i class="fa fa-times"></i></a>
+                </td>
+            </tr>
             </tbody>
         </table>
+
+        <!-- Pagination -->
+        <div class="row text-center">
+            <div class="col-md-6">
+                <form class="form-inline">
+                    <div class="form-group">
+                        <label for="">Показывать записей: </label>
+                        <select class="form-control" data-bind="options: pageSizes, value: selectedPageSize, event : { change: pageSizeChanged }"></select>
+                    </div>
+                </form>
+            </div>
+            <div class="col-md-12">
+                <!-- ko if: pagesCount() > 1 -->
+                <nav>
+                    <ul class="pagination">
+                        <li>
+                            <a href="#" aria-label="Previous" data-bind="click: function () { selectedPageChanged(selectedPage() - 1); }">
+                                <span aria-hidden="true">&laquo;</span>
+                            </a>
+                        </li>
+
+                        <!-- ko foreach: new Array(pagesCount()) -->
+                        <!-- ko if: $index() >= $parent.selectedPage() - 4 && $index() <= $parent.selectedPage() + 2 -->
+                        <li data-bind="attr: { 'class' : $parent.selectedPage() == ($index() + 1) ? 'active' : '' }">
+                            <a href="#" data-bind="text: $index()+1, click: function () { $parent.selectedPageChanged($index() + 1); }"></a>
+                        </li>
+                        <!-- /ko -->
+                        <!-- /ko -->
+                        <li>
+                            <a href="#" aria-label="Next" data-bind="click: function () { selectedPageChanged(selectedPage() + 1); }">
+                                <span aria-hidden="true">&raquo;</span>
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
+                <!-- /ko -->
+            </div>
+            <div class="col-md-6">
+                <form class="form-inline">
+                    <div class="form-group pull-right">
+                        <label for="">Найдено записей: </label>
+                        <label class="form-control" data-bind="text: employeesCount()"></label>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <!-- End of pagination -->
+        <!-- /ko -->
     </section>
 </div>
 <!-- /ko -->

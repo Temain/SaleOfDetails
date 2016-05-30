@@ -2,23 +2,53 @@
     var self = this;
 
     self.list = ko.observableArray([]);
+    self.selectedPage = ko.observable(1);
+    self.pageSizes = ko.observableArray([10, 25, 50, 100, 200]);
+    self.selectedPageSize = ko.observable(10);
+    self.employeesCount = ko.observable();
+    self.pagesCount = ko.observable();
+
+    self.selectedPageChanged = function (page) {
+        if (page > 0 && page <= self.pagesCount()) {
+            self.selectedPage(page);
+            self.loadEmployees();
+
+            window.scrollTo(0, 0);
+        }
+    }
+
+    self.pageSizeChanged = function () {
+        self.selectedPage(1);
+        self.loadEmployees();
+
+        window.scrollTo(0, 0);
+    };
 
     Sammy(function () {
         this.get('#employee', function () {
-            $.ajax({
-                method: 'get',
-                url: '/api/Employee',
-                contentType: "application/json; charset=utf-8",
-                headers: {
-                    'Authorization': 'Bearer ' + app.dataModel.getAccessToken()
-                },
-                success: function (response) {
-                    ko.mapping.fromJS(response, {}, self.list);
-                    app.view(self);
-                }
-            });
+            app.markLinkAsActive('employee');
+
+            self.loadEmployees();
         });
     });
+
+    self.loadEmployees = function () {
+        $.ajax({
+            method: 'get',
+            url: '/api/Employee',
+            data: { page: self.selectedPage(), pageSize: self.selectedPageSize() },
+            contentType: "application/json; charset=utf-8",
+            headers: {
+                'Authorization': 'Bearer ' + app.dataModel.getAccessToken()
+            },
+            success: function (response) {
+                ko.mapping.fromJS(response.items, {}, self.list);
+                self.pagesCount(response.pagesCount);
+                self.employeesCount(response.itemsCount);
+                app.view(self);
+            }
+        });
+    }
 
     self.removeEmployee = function (employee) {
         $.ajax({
@@ -80,6 +110,8 @@ var EditEmployeeViewModel = function(app, dataModel) {
 
     Sammy(function () {
         this.get('#employee/:id', function () {
+            app.markLinkAsActive('employee');
+
             var id = this.params['id'];
             if (id === 'create') {
                 app.view(app.Views.CreateEmployee);
@@ -118,21 +150,6 @@ var CreateEmployeeViewModel = function (app, dataModel) {
     });
     self.middleName = ko.observable();
     self.employeeDateStart = ko.observable(moment());
-
-    //self.validationObject = ko.validatedObservable({
-    //    lastName: self.lastName.extend({
-    //        required: {
-    //            params: true,
-    //            message: "Необходимо указать фамилию."
-    //        }
-    //    }),
-    //    firstName: self.firstName.extend({
-    //        required: {
-    //            params: true,
-    //            message: "Необходимо указать имя."
-    //        }
-    //    })
-    //});
 
     self.save = function() {
         var result = ko.validation.group(self, { deep: true });

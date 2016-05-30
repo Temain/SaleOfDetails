@@ -5,7 +5,7 @@
     {
     @Html.AntiForgeryToken()
 
-    <ul class="nav navbar-nav navbar-right">
+    <ul class="login-partial nav navbar-nav navbar-right">
         <li>
             <span class="navbar-text"><span class="glyphicon glyphicon-user"></span> <span>@(ViewBag.UserName + " [" + ViewBag.RoleName + "]")</span></span>
             @*@Html.ActionLink("Здравствуйте, " + ViewBag.UserName + "!", "Index", "Manage", routeValues: new { area = "" }, htmlAttributes: new { title = "Manage" })*@
@@ -16,7 +16,7 @@
 }
 else
 {
-    <ul class="nav navbar-nav navbar-right">
+    <ul class="login-partial nav navbar-nav navbar-right">
         <li>@Html.ActionLink("Зарегистрироваться", "Register", "Account", routeValues: new { area = "" }, htmlAttributes: new { id = "registerLink" })</li>
         <li>@Html.ActionLink("Выполнить вход", "Login", "Account", routeValues: new { area = "" }, htmlAttributes: new { id = "loginLink" })</li>
     </ul>

@@ -3,6 +3,7 @@
 
     Sammy(function () {
         this.get('#reports', function () {
+            app.markLinkAsActive('report');
             var year = 2016;
 
             $.ajax({
