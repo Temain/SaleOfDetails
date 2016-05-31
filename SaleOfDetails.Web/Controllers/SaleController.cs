@@ -38,12 +38,17 @@ namespace SaleOfDetails.Web.Controllers
         }
 
         // GET: api/Sale
-        public ListViewModel<SaleViewModel> GetSales(int page, int pageSize = 10)
+        public ListViewModel<SaleViewModel> GetSales(string query, int page, int pageSize = 10)
         {
             var salesList = UnitOfWork.Repository<Sale>()
                 .GetQ(
                     orderBy: o => o.OrderByDescending(s => s.SaleDate),
                     includeProperties: "Product, Employee, Employee.Person, Client, Client.Person");
+
+            if (query != null)
+            {
+                salesList = salesList.Where(x => x.Product.ProductName.Contains(query));
+            }
 
             var sales = salesList
                 .Skip((page - 1) * pageSize)

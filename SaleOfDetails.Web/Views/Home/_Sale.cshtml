@@ -1,7 +1,14 @@
 ﻿<!-- ko with: sale -->
-<div class="heading">
+<div class="heading">     
     <h2>Продажи</h2>
     <a class="create-link" href="/#sale/create"><i class="fa fa-cart-plus" aria-hidden="true"></i> Добавить</a>
+    
+    <div class='search input-group'>
+        <input type="text" class="form-control" placeholder="Поиск" data-bind="value: searchQuery, valueUpdate: 'afterkeydown', event:{keyup:search}" />
+        <span class="input-group-addon">
+            <i class="fa fa-search" aria-hidden="true"></i>
+        </span>
+    </div>
 </div>
 <div class="row">
     <section class="col-md-24">

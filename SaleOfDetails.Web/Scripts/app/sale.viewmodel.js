@@ -7,6 +7,7 @@
     self.selectedPageSize = ko.observable(10);
     self.salesCount = ko.observable();
     self.pagesCount = ko.observable();
+    self.searchQuery = ko.observable('');
 
     self.selectedPageChanged = function (page) {
         if (page > 0 && page <= self.pagesCount()) {
@@ -38,7 +39,7 @@
         $.ajax({
             method: 'get',
             url: '/api/Sale',
-            data: { page: self.selectedPage(), pageSize: self.selectedPageSize() },
+            data: { query: self.searchQuery(), page: self.selectedPage(), pageSize: self.selectedPageSize() },
             contentType: "application/json; charset=utf-8",
             headers: {
                 'Authorization': 'Bearer ' + app.dataModel.getAccessToken()
@@ -51,6 +52,11 @@
             }
         });
     }
+
+    self.search = _.debounce(function () {
+        self.selectedPage(1);
+        self.loadSales();
+    }, 300);
 
     self.removeSale = function (sale) {
         $.ajax({
